@@ -32,14 +32,14 @@ export default function HuskyConnectLanding() {
 }
 
 function RecommendationsPreview() {
-  const [userId, setUserId] = useState(1);
+  const storedId = localStorage.getItem("user_id");
+  const [userId, setUserId] = useState(storedId ? Number(storedId) : "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    // Auto-load once for quick demo
-    fetchRecs(userId);
+    if (storedId) fetchRecs(Number(storedId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -539,7 +539,7 @@ function SignUpSection() {
           {option}
         </option>
       ) : (
-        <option key={option.value} value={option.value}>
+        <option key={option.value} value={option.value} disabled={option.value === ""}>
           {option.label}
         </option>
       )
