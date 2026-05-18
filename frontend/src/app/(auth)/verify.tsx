@@ -10,11 +10,9 @@ import { TextField } from '@/components/ui/text-field';
 import { Spacing } from '@/constants/theme';
 import { ApiError } from '@/lib/api';
 import { resendCode, verifyCode } from '@/lib/auth-api';
-import { useAuth } from '@/lib/auth-context';
 
 export default function VerifyScreen() {
   const { email } = useLocalSearchParams<{ email: string }>();
-  const { signIn } = useAuth();
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -30,8 +28,14 @@ export default function VerifyScreen() {
     setLoading(true);
     try {
       const session = await verifyCode(email ?? '', code.trim());
-      await signIn(session);
-      router.replace('/');
+      router.replace({
+        pathname: '/profile-setup',
+        params: {
+          userId: String(session.userId),
+          name: session.name,
+          email: session.email,
+        },
+      });
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Verification failed. Try again.');
     } finally {
