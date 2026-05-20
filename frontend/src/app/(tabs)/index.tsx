@@ -1,12 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ComposePost } from '@/components/compose-post';
 import { PostCard } from '@/components/post-card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Brand, Spacing } from '@/constants/theme';
 import { ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { fetchFeed, type Post } from '@/lib/posts-api';
@@ -46,7 +48,16 @@ export default function FeedScreen() {
           keyExtractor={(p) => String(p.id)}
           ListHeaderComponent={
             <View style={styles.header}>
-              <ThemedText type="subtitle">Feed</ThemedText>
+              <View style={styles.titleRow}>
+                <ThemedText type="subtitle">Feed</ThemedText>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Notifications"
+                  onPress={() => router.push('/notifications')}
+                  style={styles.bell}>
+                  <Ionicons name="notifications-outline" size={22} color={Brand.violet700} />
+                </Pressable>
+              </View>
               <ComposePost
                 authorId={session.userId}
                 authorName={session.name}
@@ -96,6 +107,15 @@ const styles = StyleSheet.create({
   safe: { flex: 1 },
   list: { padding: Spacing.three },
   header: { gap: Spacing.three, marginBottom: Spacing.three },
+  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  bell: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Brand.violet100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sep: { height: Spacing.three },
   empty: { textAlign: 'center', marginTop: Spacing.five },
 });
