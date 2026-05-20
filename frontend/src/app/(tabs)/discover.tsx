@@ -47,11 +47,20 @@ export default function DiscoverScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safe}>
-        <View style={styles.header}>
-          <ThemedText type="subtitle">Discover</ThemedText>
-          <ThemedText type="default" themeColor="textSecondary">
-            Today&apos;s Huskies
-          </ThemedText>
+        <View style={styles.headerRow}>
+          <View style={styles.header}>
+            <ThemedText type="subtitle">Discover</ThemedText>
+            <ThemedText type="default" themeColor="textSecondary">
+              Today&apos;s Huskies
+            </ThemedText>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Search"
+            onPress={() => router.push('/search')}
+            style={styles.searchBtn}>
+            <Ionicons name="search" size={22} color={Brand.violet700} />
+          </Pressable>
         </View>
 
         {total > 0 ? (
@@ -122,7 +131,16 @@ export default function DiscoverScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   safe: { flex: 1, padding: Spacing.three, gap: Spacing.three },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   header: { gap: 4 },
+  searchBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Brand.violet100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   progressRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   progressTrack: {
     flex: 1,
