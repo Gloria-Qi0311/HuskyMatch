@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 
@@ -33,7 +33,11 @@ export default function OtherStudentProfileScreen() {
   }
 
   const handleMessage = () => {
-    Alert.alert('Coming soon', 'Messaging will be available in the next issue.');
+    if (!student) return;
+    router.push({
+      pathname: '/messages/[otherId]',
+      params: { otherId: String(student.userId) },
+    });
   };
 
   const handleReportBlock = () => {
