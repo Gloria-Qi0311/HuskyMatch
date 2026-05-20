@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
+import { AIFab } from '@/components/ai-fab';
 import { AuthProvider, useAuth } from '@/lib/auth-context';
 
 function RootNavigator() {
@@ -36,6 +37,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthProvider>
         <RootNavigator />
+        <AIFab />
       </AuthProvider>
       <StatusBar style="auto" />
     </ThemeProvider>
