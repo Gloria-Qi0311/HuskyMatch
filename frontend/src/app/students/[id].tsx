@@ -1,6 +1,6 @@
-import { router } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 
 import { StudentProfileView } from '@/components/student-profile-view';
 import { ThemedText } from '@/components/themed-text';
@@ -8,24 +8,21 @@ import { ThemedView } from '@/components/themed-view';
 import { Button } from '@/components/ui/button';
 import { Spacing } from '@/constants/theme';
 import { ApiError } from '@/lib/api';
-import { useAuth } from '@/lib/auth-context';
 import { fetchStudent, type Student } from '@/lib/profile-api';
 
-export default function ProfileScreen() {
-  const { session, signOut } = useAuth();
+export default function OtherStudentProfileScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const [student, setStudent] = useState<Student | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!session) return;
-    fetchStudent(session.userId)
+    if (!id) return;
+    fetchStudent(Number(id))
       .then(setStudent)
       .catch((e) =>
         setError(e instanceof ApiError ? e.message : 'Could not load profile.'),
       );
-  }, [session]);
-
-  if (!session) return null;
+  }, [id]);
 
   if (!student) {
     return (
@@ -35,19 +32,24 @@ export default function ProfileScreen() {
     );
   }
 
+  const handleMessage = () => {
+    Alert.alert('Coming soon', 'Messaging will be available in the next issue.');
+  };
+
+  const handleReportBlock = () => {
+    Alert.alert(
+      'Coming soon',
+      'Report and block actions will be available once the moderation backend lands.',
+    );
+  };
+
   return (
     <StudentProfileView
       student={student}
       actions={
         <>
-          <Button label="Edit profile" onPress={() => router.push('/profile/edit')} />
-          <Button
-            label="Log out"
-            variant="secondary"
-            onPress={() => {
-              void signOut();
-            }}
-          />
+          <Button label="Message" onPress={handleMessage} />
+          <Button label="Report or block" variant="secondary" onPress={handleReportBlock} />
         </>
       }
     />
